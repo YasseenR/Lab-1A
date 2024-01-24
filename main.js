@@ -29,18 +29,25 @@ function updateLogs(profiles) {
     "Full Name, TUID, Email, Phone Number, Major, Graduation Date, Is this student an undergrad? (Y/n)\n" +
     profiles
       .map((profile) => {
-        profile.fname, profile.tuid;
+        return `${profile.fname}, ${profile.tuid}, ${profile.email}, ${profile.pnumber}, ${profile.major}, ${profile.graddate}, ${profile.undergrad}`;
       })
       .join("\n");
 
   var blob1 = new Blob([logContent], { type: "text/csv" });
 
-  var link = document.createElement("a");
-  link.href = URL.createObjectURL(blob1);
+  var csvButton = document.getElementById("downloadCSVButton");
 
-  link.download = "names_list.csv";
+  if (!csvButton) {
+    var csvButton = document.createElement("button");
+    csvButton.id = "downloadCSVButton";
 
-  document.body.appendChild(link);
-
-  link.click();
+    csvButton.textContent = "Download CSV";
+    document.body.appendChild(csvButton);
+  }
+  csvButton.addEventListener("click", () => {
+    var link = document.createElement("a");
+    link.href = URL.createObjectURL(blob1);
+    link.download = "students_list.csv";
+    link.click();
+  });
 }
